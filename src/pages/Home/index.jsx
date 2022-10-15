@@ -1,17 +1,29 @@
-import { useState } from 'react'
 import styles from './home.module.css'
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { auth } from '../../firebaseConnection'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
 export default function Home() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const navigate = useNavigate()
+
   const handleLogin = (e) => {
     e.preventDefault();
 
     if(email !== '' && password !== ''){
-      alert('funcionando')
+      
+      signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        navigate('/admin', { replace: true })
+      })
+      .catch((e) => {
+        console.log('Error ---- ' + e)
+      })
+
     } else {
       alert('Incorrect Email/Password')
     }

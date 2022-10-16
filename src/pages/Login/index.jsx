@@ -1,24 +1,24 @@
-import styles from '../Login/login.module.css'
+import styles from './login.module.css'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { auth } from '../../firebaseConnection'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
-export default function Register() {
+export default function Home() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const navigate = useNavigate()
 
-  const handleRegister = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
 
     if(email !== '' && password !== ''){
       
-      createUserWithEmailAndPassword(auth, email, password)
+      signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        navigate('/admin', { replace: true })
+        navigate('/home', { replace: true })
       })
       .catch((e) => {
         console.log('Error ---- ' + e)
@@ -35,8 +35,8 @@ export default function Register() {
 
       <h1>TO-DO List</h1>
 
-      <form onSubmit={handleRegister}>
-        
+      <form onSubmit={handleLogin}>
+
         <input 
           type="text"
           placeholder='Email'
@@ -51,12 +51,16 @@ export default function Register() {
           onChange={e => setPassword(e.target.value)}
         />
 
-        <button type='submit'>REGISTER</button>
+        <button type='submit'>LOG IN</button>
 
       </form>
 
-      <Link className={styles.registerLink} to="/">
-        Have an account? <strong>Log In</strong>
+      <Link className={styles.registerLink} to="/register">
+        Don't have an account? <strong>Register</strong>
+      </Link>
+
+      <Link className={styles.fPassLink}>
+        FORGOT YOUR PASSWORD?
       </Link>
 
     </div>

@@ -1,18 +1,45 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CgLogOff } from 'react-icons/cg'
 import { AiOutlinePlus, AiOutlineCheck } from 'react-icons/ai'
 import { BsPencilSquare } from 'react-icons/bs'
-import { auth } from '../../firebaseConnection'
+import { auth, db } from '../../firebaseConnection'
 import { signOut } from 'firebase/auth'
+import { addDoc, collection } from 'firebase/firestore'
 import styles from './home.module.css'
 
 export default function Admin() {
 
   const [taskInput, setTaskInput] = useState('')
+  const [user, setUser] = useState({})
+
+  useEffect(() => {
+    const loadTask = () => {
+      const userDetail = localStorage.getItem("@dataUser")
+      setUser(JSON.parse(userDetail))
+    }
+
+    loadTask()
+  }, [])
 
   const handleRegister = (e) => {
     e.preventDefault()
-    alert()
+
+    if(taskInput === '') {
+      alert("Enter your task...")
+      return
+    }
+
+    addDoc(collection(db, "tasks"), {
+      task: taskInput,
+      created: new Date(),
+      userUid: user?.uid
+    })
+    .then(() => {
+      console.log("SUCCESS")
+      setTaskInput('')
+    })
+    .catch(e => console.log(e))
+
   }
 
   const handleLogOut = () => {
@@ -24,7 +51,6 @@ export default function Admin() {
       <header>
 
         <h2 className={styles.logo}>TO-DO List</h2>
-        <h1>Your tasks</h1>
         <button onClick={handleLogOut} className={styles.logoffBtn}>
           <span><CgLogOff /></span>
         </button>
@@ -44,6 +70,18 @@ export default function Admin() {
             <span><AiOutlinePlus /></span>
           </button>
         </form>
+
+        <article>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <div>
+            <button className={styles.editBtn}>
+              <BsPencilSquare />
+            </button>
+            <button className={styles.concludeBtn}>
+              <AiOutlineCheck />
+            </button>
+          </div>
+        </article>
 
         <article>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>

@@ -7,7 +7,7 @@ button {
     cursor: pointer;
 }
 
-h1, h2, button {
+h2, button {
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
     color: #edf0f1;
@@ -28,7 +28,6 @@ header {
     color: rgb(189, 33, 33);
     border-left: 2px solid transparent;
     border-right: 2px solid transparent;
-    padding: 0 5px;
     border-radius: 10px;
     transition: border .5s;
 }
